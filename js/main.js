@@ -45,40 +45,47 @@ function text(option) {
             return TEXTMENUCALCULATOR  
     }
 }
-
 function menuStart(option) {
-    let menu = numberValidator(prompt(option))
-    switch (menu) {
-        case 1:
-            user = menuUser()
-            password = menuPassConfirm()
-            alert("Su usuario es: " + user + "\nSu contraseña es: " + password)
-            menuStart(text(1))
-            break
-        case 2:
-            let aux = login()
-            if (aux) {
-                calculator()
-                menuStart(text(1))
+    let menu 
+    while (menu !== 3) {
+
+        menu = numberValidator(prompt(option))
+        switch (menu) {
+            case 1:
+                user = menuUser()
+                if (user === 3) {
+                    break
+                }
+                password = menuPassConfirm()
+                if (password === 3) {
+                    break
+                }
+                alert("Su usuario es: " + user + "\nSu contraseña es: " + password)
+                break
+            case 2:
+                let aux = login()
+                if (aux) {
+                    calculator()
+                }
+                else {
+                    break
+                }
+                break
+            case 3: 
+                break
+            /*Creo este caso (case 4:) ya que si dentro de la función numberValidator 
+            en el else invocaba la función menuStart, cuando se usara la función numberValidator 
+            por segunda vez se salteaba el if, y entraba directamente dentro del else */
+            case 4:
+                option = text(2)
+                break
+            default:
+                option = text(2)
+                break
             }
-            else {
-                menuStart(text(1))
-            }
-            break
-        case 3: 
-            break
-        /*Creo este caso (case 4:) ya que si dentro de la función numberValidator 
-        en el else invocaba la función menuStart, cuando se usara la función numberValidator 
-        por segunda vez se salteaba el if, y entraba directamente dentro del else */
-        case 4:
-            menuStart(text(2))
-            break
-        default:
-            menuStart(text(2))
-            break
-        }
     }
-function calculator(){
+    }
+function calculator() {
     let start = "CALCULADORA DE COMBINACIONES.\n\n\nElija una opción:\n\n1 - Calculadora de combinaciones sin repetición.\n2- Calculadora de combinaciones con repeticiones.\n3 - Salir.\n"
     let combinacionesSinRepeticiones = "Calculadora de combinaciones sin repetición.\n\nFórmula: \u207FC\u2096 = n! / k!(n-k)!\n\nDónde n es el número de elementos a escoger y k el número de elementos de cada combinación.\n\nRecuerde que n debe de ser mayor igual que k para que existan combinaciones\n\n"
     let combinacionesConRepeticiones = "Calculadora de combinaciones con repeticiones.\n\nFórmula: CR\u2099\u2096 = ((n+k-1)!)/(k!(n-1)!\n\nDónde n es el número de elementos a escoger y k el número de elementos de cada combinación.\n\n"
@@ -133,24 +140,31 @@ function calculator(){
                 alert("Existen "+ x + " de combinaciones.")
                 break
             default:
+                
                 break
         }
     } while (menu != 3)
 }
-function login(){
+function login() {
     let username
     let passname 
     let intento = 0
     do {
-        if (intento > 0){
+        if (intento > 0) {
             alert("¡Contraseña o usuario incorrectos!\nIntente de nuevo.\nLe restan " + (3 - intento) + " intentos")
         }
         username = menuUser()
+        if (username === 3) {
+            return false
+        }
         passname = menuPassname(text(6))
+        if (passname === 3) {
+            return false
+        }
         intento ++
     } while (((username !== user) || (passname !== password)) && (intento < 3))
 
-    if (username !== user || passname !== password){
+    if (username !== user || passname !== password) {
         alert("Su usuario ha sido bloquedo")
         return false
     }
@@ -161,9 +175,18 @@ function login(){
 }
 function menuPassConfirm() {
     let pass = menuPassname(text(6))
+    if (pass === 3) {
+        return 3
+    }
     let passAux = menuPassname(text(7))
+    if (passAux === 3) {
+        return 3
+    }
     while(pass !== passAux) {
         passAux = menuPassname(text(10))
+        if (passAux === 3) {
+            return 3
+        }
     }
     return pass
 }
@@ -173,12 +196,12 @@ function menuPassname(option) {
     let i = true
     while (i) {
         if (pass === 3) {
-            menuStart(text(1))
+            return 3
         }
-        else if (pass === 4){
+        else if (pass === 4) {
             pass = menuUserName(text(8))
         }
-        else if (pass === 5){
+        else if (pass === 5) {
             pass = menuUserName(text(9))
         }
         else{
@@ -188,17 +211,17 @@ function menuPassname(option) {
     return pass
 }
 
-function menuUser(){
+function menuUser() {
     let name = menuUserName(text(3))
     let i = true
     while (i) {
         if (name === 3) {
-            menuStart(text(1))
+            return 3
         }
-        else if (name === 4){
+        else if (name === 4) {
             name = menuUserName(text(4))
         }
-        else if (name === 5){
+        else if (name === 5) {
             name = menuUserName(text(5))
         }
         else{
@@ -216,7 +239,7 @@ function menuUserName(option) {
         return 5
     }
     else if (user === "3") {
-        return Number(user)
+        return 3
     }
     while (i <= user.length - 1 && aux) {
         if (user[i] === " ") {
@@ -232,10 +255,10 @@ function menuUserName(option) {
 
 function numberValidator(input) {
     input = Number(input)
-        if (!isNaN(input) ){
+        if (!isNaN(input)) {
             return input
         }
-        else{
+        else {
             return 4
         }
 }
